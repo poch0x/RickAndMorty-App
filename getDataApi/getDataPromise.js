@@ -3,7 +3,10 @@ const API = "https://rickandmortyapi.com/api/character/";
 const getData = (apiURL) => {
     return fetch(apiURL)
         .then(response => response.json() )
-        .then(json => { printData(json) })
+        .then(json => {
+            printData(json),
+                printPagination(json.info)
+        })
         .catch(error => { console.error("Error -->: ", error) })
 }
 
@@ -23,6 +26,16 @@ const printData = (data) => {
     });
     document.getElementById('infoCharecters').innerHTML = html;
 
+}
+
+const printPagination = (info) => {
+
+    let preDisable = info.prev == null ? 'disabled' : '';
+    let nextDisable = info.next == null ? 'disabled' : '';
+
+    let html = `<li class="page-item" ${preDisable}><a class="page-link" onclick="getData('${info.prev}')">Previous</a></li>`
+    html += `<li class="page-item ${nextDisable}"><a class="page-link" onclick="getData('${info.next}')">Next</a></li>`
+    document.getElementById('pagination').innerHTML = html;
 }
 
 getData(API)
